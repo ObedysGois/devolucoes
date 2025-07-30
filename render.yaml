@@ -1,24 +1,28 @@
 services:
+  # Backend Service (Node.js)
   - type: web
     name: renomeador-nf-gdm-backend
     env: node
     region: oregon
     plan: free
     healthCheckPath: /
+    # Define o diretório de trabalho para o backend
+    cwd: ./server
     buildCommand: "npm install"
     startCommand: "npm start"
-    cwd: server
     envVars:
       - key: NODE_VERSION
-        value: 18.0.0
+        value: "18.17.1" # Usando uma versão LTS estável
 
-  - type: web
+  # Frontend Service (React Static Site)
+  - type: static_site
     name: renomeador-nf-gdm-frontend
-    env: static
     region: oregon
     plan: free
-    staticPublishPath: renomeador-nf-gdm-app/build
-    buildCommand: "npm run build"
+    # Comando de build explícito para o frontend
+    buildCommand: "cd renomeador-nf-gdm-app && npm install && npm run build"
+    # O diretório onde o resultado do build estará
+    staticPublishPath: ./renomeador-nf-gdm-app/build
     envVars:
       - key: NODE_VERSION
-        value: 18.0.0
+        value: "18.17.1"
