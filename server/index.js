@@ -362,11 +362,22 @@ app.use((error, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 // Configure CORS para aceitar o domínio do Netlify:
+const allowedOrigins = [
+  'http://localhost:3000',
+  process.env.FRONTEND_URL, // Adiciona a URL do frontend a partir das variáveis de ambiente
+  'renomeadordev.netlify.app'
+].filter(Boolean); // Filtra valores nulos ou indefinidos
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'renomeadordev.netlify.app' // Substitua pelo seu domínio
-  ],
+  origin: function (origin, callback) {
+    // Permite requisições sem 'origin' (ex: Postman, mobile apps)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'A política de CORS para este site não permite acesso da sua origem.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   credentials: true
 }));
 
