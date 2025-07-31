@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+server/node_modules
+renomeador-nf-gdm-app/node_modules
+node_modules/
 /.pnp
 .pnp.js
 
@@ -21,4 +24,4 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.env.* 
+.env.*
